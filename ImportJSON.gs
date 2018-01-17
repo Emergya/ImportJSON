@@ -65,7 +65,11 @@
  * @return a two-dimensional array containing the data, with the first row containing headers
  **/
 function ImportJSON(url, query, parseOptions) {
-  return ImportJSONAdvanced(url, null, query, parseOptions, includeXPath_, defaultTransform_);
+  var json = ImportJSONAdvanced(url, query, options, includeXPath_, defaultTransform_);
+  if(operation && operation === "sum"){
+    return sum(json);
+  }
+  return json;
 }
 
 /**
@@ -617,4 +621,17 @@ function getDataFromNamedSheet_(sheetName) {
   }
   Logger.log(jsonText);
   return JSON.parse(jsonText);
+}
+
+/** 
+ * Returns the sum for more than one row from a json
+ */
+function sum(json) {
+  var el = 0;
+  for(var j=0; j<json.length; j++){
+    if(json[j]){
+      el+= parseFloat(json[j][0]);
+    } 
+  }
+  return el;
 }
